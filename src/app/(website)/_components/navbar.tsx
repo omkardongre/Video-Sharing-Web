@@ -8,14 +8,8 @@ const LandingPageNavBar = () => {
     <div className="flex w-full justify-between items-center">
       <div className="text-3xl font-semibold flex items-center gap-x-3">
         <Menu className="w-8 h-8" />
-<Image 
-   alt="Opal logo" 
-   src="/opal-logo.svg" 
-   width={40} 
-   height={40} 
-   priority
-/>
-        Opal
+        <Image alt="logo" src="/logo.svg" width={40} height={40} />
+        Video Sharing
       </div>
       <div className="hidden gap-x-10 items-center lg:flex">
         <Link
