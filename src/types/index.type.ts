@@ -1,28 +1,29 @@
-enum SUBSCRIPTION_PLAN {
-  PRO,
-  FREE,
+export enum SubscriptionPlan {
+  PRO = "PRO",
+  FREE = "FREE",
 }
 
-enum WorkSpaceType {
-  PUBLIC,
-  PERSONAL,
+export enum WorkspaceType {
+  PUBLIC = "PUBLIC",
+  PERSONAL = "PERSONAL",
 }
 
 export type WorkspaceProps = {
+  status: number;
   data: {
     subscription: {
-      plan: SUBSCRIPTION_PLAN;
+      plan: SubscriptionPlan;
     } | null;
     workspace: {
       id: string;
       name: string;
-      type: WorkSpaceType;
+      type: WorkspaceType;
     }[];
     members: {
       WorkSpace: {
         id: string;
         name: string;
-        type: WorkSpaceType;
+        type: WorkspaceType;
       };
     }[];
   };
