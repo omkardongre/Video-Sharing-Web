@@ -14,11 +14,21 @@ type Props = {
   title: string;
   description: string;
   className?: string;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 };
 
-const Modal = ({ children, description, title, trigger, className }: Props) => {
+const Modal = ({
+  children,
+  description,
+  title,
+  trigger,
+  className,
+  open,
+  onOpenChange,
+}: Props) => {
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger className={className} asChild>
         {trigger}
       </DialogTrigger>

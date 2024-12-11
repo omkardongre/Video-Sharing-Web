@@ -20,7 +20,7 @@ import { WORKSPACES } from "@/redux/slices/workspaces";
 import {
   NotificationProps,
   SubscriptionPlan,
-  WorkspaceProps,
+  UserWorkspaceResponse,
   WorkspaceType,
 } from "@/types/index.type";
 import { Menu, PlusCircle } from "lucide-react";
@@ -51,9 +51,7 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
     getNotifications
   );
 
-  const { data: workspace } = data as WorkspaceProps;
-
-  console.log("workspace\n", data);
+  const { data: workspace } = data as UserWorkspaceResponse;
 
   // TODO : Use Notifications
   const { data: notification } = notifications as NotificationProps;

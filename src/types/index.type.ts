@@ -8,25 +8,27 @@ export enum WorkspaceType {
   PERSONAL = "PERSONAL",
 }
 
-export type WorkspaceProps = {
-  status: number;
-  data: {
-    subscription: {
-      plan: SubscriptionPlan;
-    } | null;
-    workspace: {
+export type UserWorkspaceDetails = {
+  subscription: {
+    plan: SubscriptionPlan;
+  } | null;
+  workspace: {
+    id: string;
+    name: string;
+    type: WorkspaceType;
+  }[];
+  members: {
+    WorkSpace: {
       id: string;
       name: string;
       type: WorkspaceType;
-    }[];
-    members: {
-      WorkSpace: {
-        id: string;
-        name: string;
-        type: WorkspaceType;
-      };
-    }[];
-  };
+    };
+  }[];
+};
+
+export type UserWorkspaceResponse = {
+  status: number;
+  data: UserWorkspaceDetails;
 };
 
 export type NotificationProps = {
