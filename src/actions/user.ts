@@ -215,7 +215,7 @@ export const inviteMembers = async (
           const { transporter, mailOptions } = await sendEmail(
             email,
             "You got an invitation",
-            "You are invited to join ${workspace.name} Workspace, click accept to confirm",
+            `You are invited to join ${workspace.name} Workspace, click accept to confirm`,
             `<a href="${process.env.NEXT_PUBLIC_HOST_URL}/invite/${invitation.id}" style="background-color: #000; padding: 5px 10px; border-radius: 10px;">Accept Invite</a>`
           );
 
