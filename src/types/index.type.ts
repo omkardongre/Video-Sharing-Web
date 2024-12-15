@@ -71,3 +71,18 @@ export type VideosProps = {
     source: string;
   }[];
 };
+
+export type FolderDetails = {
+  id: string;
+  name: string;
+  createdAt: Date;
+  workSpaceId: string | null;
+  _count: {
+    videos: number;
+  };
+};
+
+export type WorkspaceFoldersResponse = {
+  status: number;
+  data: FolderDetails[];
+};

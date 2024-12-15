@@ -1,6 +1,7 @@
 "use server";
 
 import { client } from "@/lib/prisma";
+import { WorkspaceFoldersResponse } from "@/types/index.type";
 import { currentUser } from "@clerk/nextjs/server";
 
 export const verifyAccessToWorkspace = async (workspaceId: string) => {
@@ -131,7 +132,9 @@ export const getAllUserVideos = async (workSpaceId: string) => {
   }
 };
 
-export const getWorkspaceFolders = async (workSpaceId: string) => {
+export const getWorkspaceFolders = async (
+  workSpaceId: string
+): Promise<WorkspaceFoldersResponse> => {
   try {
     const isFolders = await client.folder.findMany({
       where: {
