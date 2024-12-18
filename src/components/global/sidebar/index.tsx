@@ -34,6 +34,7 @@ import PaymentButton from "../payment-button";
 import Search from "../search";
 import SidebarItem from "./sidebar-item";
 import WorkspacePlaceholder from "./workspace-placeholder";
+import { useEffect } from "react";
 type Props = {
   activeWorkspaceId: string;
 };
@@ -63,9 +64,15 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
     (s) => s.id === activeWorkspaceId
   );
 
-  if (isFetched && workspace) {
-    dispatch(WORKSPACES({ workspaces: workspace.workspace }));
-  }
+  useEffect(() => {
+    try {
+      if (isFetched && workspace) {
+        dispatch(WORKSPACES({ workspaces: workspace.workspace }));
+      }
+    } catch (error) {
+      console.error("Error dispatching workspaces:", error);
+    }
+  }, [isFetched, workspace]);
 
   const SidebarSection = (
     <div className="bg-[#111111] flex-none relative p-4 min-h-screen w-[250px] flex flex-col gap-4 items-center ">

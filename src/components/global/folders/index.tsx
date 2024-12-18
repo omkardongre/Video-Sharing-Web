@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { FOLDERS } from "@/redux/slices/folders";
 import { WorkspaceFoldersResponse } from "@/types/index.type";
 import { ArrowRight } from "lucide-react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import Videos from "../videos";
 import Folder from "./folder";
@@ -38,19 +39,16 @@ const Folders = ({ workspaceId }: Props) => {
   );
 
   const { latestVariables } = useMutationDataState(["create-folder"]);
+  const { status, data: folders = [] } = data || {};
 
-  if (data === undefined) {
-    return;
-  }
-
-  const { status, data: folders } = data;
-
-  if (isFetched && folders) {
-    dispatch(FOLDERS({ folders: folders }));
-  }
+  useEffect(() => {
+    if (isFetched && folders) {
+      dispatch(FOLDERS({ folders: folders }));
+    }
+  }, [isFetched, folders, dispatch]);
 
   return (
-    <div className="flex flex-col gap-4" suppressHydrationWarning>
+    <div className="flex flex-col gap-4">
       <div className="flex items-center  justify-between">
         <div className="flex items-center gap-4">
           <FolderDuotone />

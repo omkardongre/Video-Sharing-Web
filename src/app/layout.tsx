@@ -2,9 +2,9 @@ import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 
-import { ThemeProvider } from "@/components/theme";
 import ReactQueryProvider from "@/react-query";
 import { ReduxProvider } from "@/redux/provider";
+import ThemeProviders from "@/theme";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "sonner";
 import "./globals.css";
@@ -25,11 +25,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${manrope.className} bg-[#171717]`}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            disableTransitionOnChange
-          >
+          <ThemeProviders>
             <ReduxProvider>
               <ReactQueryProvider>
                 {children}
@@ -38,7 +34,7 @@ export default function RootLayout({
                 <ReactQueryDevtools initialIsOpen={false} />
               </ReactQueryProvider>
             </ReduxProvider>
-          </ThemeProvider>
+          </ThemeProviders>
         </body>
       </html>
     </ClerkProvider>
