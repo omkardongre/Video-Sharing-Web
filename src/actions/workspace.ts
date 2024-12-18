@@ -1,7 +1,10 @@
 "use server";
 
 import { client } from "@/lib/prisma";
-import { WorkspaceFoldersResponse } from "@/types/index.type";
+import {
+  WorkspaceFoldersResponse,
+  WorkspaceVideosResponse,
+} from "@/types/index.type";
 import { currentUser } from "@clerk/nextjs/server";
 
 export const verifyAccessToWorkspace = async (workspaceId: string) => {
@@ -88,10 +91,12 @@ export const getWorkSpaces = async () => {
   }
 };
 
-export const getAllUserVideos = async (workSpaceId: string) => {
+export const getAllUserVideos = async (
+  workSpaceId: string
+): Promise<WorkspaceVideosResponse> => {
   try {
     const user = await currentUser();
-    if (!user) return { status: 404 };
+    if (!user) return { status: 404, data: [] };
     const videos = await client.video.findMany({
       where: {
         // TODO: Check if this condition folderId: workSpaceId is needed
@@ -126,9 +131,9 @@ export const getAllUserVideos = async (workSpaceId: string) => {
       return { status: 200, data: videos };
     }
 
-    return { status: 404 };
+    return { status: 404, data: [] };
   } catch {
-    return { status: 400 };
+    return { status: 400, data: [] };
   }
 };
 

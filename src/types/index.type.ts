@@ -86,3 +86,22 @@ export type WorkspaceFoldersResponse = {
   status: number;
   data: FolderDetails[];
 };
+
+export type VideoDetails = {
+  id: string;
+  title: string | null;
+  createdAt: Date;
+  source: string;
+  processing: boolean;
+  Folder: {
+    id: string;
+    name: string;
+  } | null;
+  User: {
+    firstName: string | null;
+    lastName: string | null;
+    image: string | null;
+  } | null;
+};
+
+export type WorkspaceVideosResponse = { status: number; data: VideoDetails[] };
