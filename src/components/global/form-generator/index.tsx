@@ -17,6 +17,7 @@ type Props = {
   options?: { value: string; label: string; id: string }[];
   label?: string;
   placeholder: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register: UseFormRegister<any>;
   name: string;
   errors: FieldErrors<FieldValues>;
@@ -41,7 +42,7 @@ const FormGenerator = ({
   const { setError, clearErrors } = useFormContext();
 
   useEffect(() => {
-    console.log("watchedValue is changign : ", watchedValue);
+    console.log("watchedValue is changing : ", watchedValue);
     const handler = setTimeout(() => {
       setDebouncedValue(watchedValue);
     }, 600);
@@ -71,7 +72,7 @@ const FormGenerator = ({
     if (debouncedValue) {
       createFolder();
     }
-  }, [debouncedValue]);
+  }, [debouncedValue, checkExists, clearErrors, name, setError]);
 
   switch (inputType) {
     case "input":

@@ -44,6 +44,7 @@ const Folder = ({ id, name, optimistic, count }: Props) => {
     Rename();
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const updateFolderName = (e: React.FocusEvent<HTMLInputElement>) => {
     if (inputRef.current) {
       if (inputRef.current.value) {

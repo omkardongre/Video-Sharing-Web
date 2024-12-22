@@ -219,7 +219,7 @@ export const inviteMembers = async (
             `<a href="${process.env.NEXT_PUBLIC_HOST_URL}/invite/${invitation.id}" style="background-color: #000; padding: 5px 10px; border-radius: 10px;">Accept Invite</a>`
           );
 
-          transporter.sendMail(mailOptions, (error, info) => {
+          transporter.sendMail(mailOptions, (error) => {
             if (error) {
               console.log("🔴", error.message);
             } else {

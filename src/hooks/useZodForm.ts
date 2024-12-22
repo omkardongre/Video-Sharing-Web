@@ -6,6 +6,7 @@ import z, { ZodSchema } from "zod";
 const useZodForm = (
   schema: ZodSchema,
   mutation: UseMutateFunction,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   defaultValues?: any
 ) => {
   const methods = useForm<z.infer<typeof schema>>({

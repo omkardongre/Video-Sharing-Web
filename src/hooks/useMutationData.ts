@@ -9,8 +9,9 @@ import { toast } from "sonner";
 
 export const useMutationData = (
   mutationKey: MutationKey,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   mutationFn: MutationFunction<any, any>,
-  queryKey?: string,
+  queryKey?: string | readonly string[],
   onSuccess?: () => void
 ) => {
   const client = useQueryClient();
@@ -27,10 +28,18 @@ export const useMutationData = (
       );
     },
     onSettled: async () => {
-      return await client.invalidateQueries({
-        queryKey: [queryKey],
-        exact: true,
-      });
+      if (!queryKey) return;
+
+      const keysToInvalidate = Array.isArray(queryKey) ? queryKey : [queryKey];
+
+      await Promise.all(
+        keysToInvalidate.map((key) =>
+          client.invalidateQueries({
+            queryKey: [key],
+            exact: true,
+          })
+        )
+      );
     },
   });
 
@@ -42,6 +51,7 @@ export const useMutationDataState = (mutationKey: MutationKey) => {
     filters: { mutationKey },
     select: (mutation) => {
       return {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         variables: mutation.state.variables as any,
         status: mutation.state.status,
       };

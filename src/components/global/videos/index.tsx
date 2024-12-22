@@ -12,10 +12,10 @@ type Props = {
   workspaceId: string;
 };
 
-const Videos = ({ folderId, videosKey, workspaceId }: Props) => {
+const Videos = ({ videosKey, workspaceId }: Props) => {
   const { data: videoData } = useQueryData<WorkspaceVideosResponse>(
     [videosKey],
-    () => getAllUserVideos(folderId)
+    () => getAllUserVideos(workspaceId)
   );
 
   if (!videoData) {

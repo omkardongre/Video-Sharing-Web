@@ -11,14 +11,13 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 
-import { getNotifications } from "@/actions/user";
+import Loading from "@/app/dashboard/[workspaceId]/loading";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { MENU_ITEMS } from "@/constants";
 import { useQueryData } from "@/hooks/useQueryData";
 import { WORKSPACES } from "@/redux/slices/workspaces";
 import {
-  NotificationProps,
   SubscriptionPlan,
   UserWorkspaceResponse,
   WorkspaceType,
@@ -26,6 +25,7 @@ import {
 import { Menu, PlusCircle } from "lucide-react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useTransition } from "react";
 import { useDispatch } from "react-redux";
 import GlobalCard from "../global-card";
 import InfoBar from "../info-bar";
@@ -34,7 +34,6 @@ import PaymentButton from "../payment-button";
 import Search from "../search";
 import SidebarItem from "./sidebar-item";
 import WorkspacePlaceholder from "./workspace-placeholder";
-import { useEffect } from "react";
 type Props = {
   activeWorkspaceId: string;
 };
@@ -47,19 +46,19 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
   const dispatch = useDispatch();
 
   const { data, isFetched } = useQueryData(["user-workspaces"], getWorkSpaces);
-  const { data: notifications } = useQueryData(
-    ["user-notifications"],
-    getNotifications
-  );
+  const [isPending, startTransition] = useTransition();
 
   const { data: workspace } = data as UserWorkspaceResponse;
 
   // TODO : Use Notifications
-  const { data: notification } = notifications as NotificationProps;
+  // const { data: notification } = notifications as NotificationProps;
 
   const onChangeActiveWorkspace = (value: string) => {
-    router.push(`/dashboard/${value}`);
+    startTransition(() => {
+      router.push(`/dashboard/${value}`);
+    });
   };
+
   const currentWorkspace = workspace.workspace.find(
     (s) => s.id === activeWorkspaceId
   );
@@ -72,7 +71,9 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
     } catch (error) {
       console.error("Error dispatching workspaces:", error);
     }
-  }, [isFetched, workspace]);
+  }, [isFetched, workspace, dispatch]);
+
+  if (isPending) return <Loading />;
 
   const SidebarSection = (
     <div className="bg-[#111111] flex-none relative p-4 min-h-screen w-[250px] flex flex-col gap-4 items-center ">

@@ -17,7 +17,7 @@ const WorkspaceForm = ({ onSuccess }: Props) => {
     if (isSuccess) {
       onSuccess();
     }
-  }, [isSuccess]);
+  }, [isSuccess, onSuccess]);
 
   return (
     <FormProvider {...methods}>
