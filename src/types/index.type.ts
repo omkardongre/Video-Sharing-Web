@@ -56,8 +56,8 @@ export type VideosProps = {
   status: number;
   data: {
     User: {
-      firstName: string | null;
-      lastName: string | null;
+      firstName: string;
+      lastName: string;
       image: string | null;
     } | null;
     id: string;
@@ -98,10 +98,106 @@ export type VideoDetails = {
     name: string;
   } | null;
   User: {
-    firstName: string | null;
-    lastName: string | null;
+    firstName: string;
+    lastName: string;
     image: string | null;
   } | null;
 };
 
 export type WorkspaceVideosResponse = { status: number; data: VideoDetails[] };
+
+export type VideoProps = {
+  status: number;
+  data: {
+    User: {
+      firstName: string;
+      lastName: string;
+      image: string | null;
+      clerkId: string;
+      trial: boolean;
+      subscription: {
+        plan: "PRO" | "FREE";
+      } | null;
+    };
+    title: string | null;
+    description: string | null;
+    source: string;
+    views: number;
+    createdAt: Date;
+    processing: boolean;
+    summary: string;
+  };
+  author: boolean;
+};
+
+export type NotificationDetails = {
+  id: string;
+  userId: string | null;
+  content: string;
+};
+
+export type NotificationCount = {
+  notification: NotificationDetails[];
+  _count: {
+    notification: number;
+  };
+};
+
+export type NotificationResponse = {
+  status: number;
+  data: NotificationCount;
+};
+
+export type UserDetails = {
+  id: string;
+  subscription: {
+    plan: "PRO" | "FREE";
+  } | null;
+  firstName: string;
+  lastName: string;
+  image: string | null;
+  email: string | null;
+};
+
+export type CommentRepliesProps = {
+  id: string;
+  content: string;
+  createdAt: Date;
+  parentCommentId: string | null;
+  userId: string | null;
+  videoId: string | null;
+  User: {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    createdAt: Date;
+    clerkId: string;
+    image: string | null;
+    trial: boolean;
+    firstView: boolean;
+  };
+};
+
+export type VideoCommentProps = {
+  data: {
+    User: {
+      id: string;
+      email: string;
+      firstName: string;
+      lastName: string;
+      createdAt: Date;
+      clerkId: string;
+      image: string | null;
+      trial: boolean;
+      firstView: boolean;
+    };
+    reply: CommentRepliesProps[];
+    id: string;
+    comment: string;
+    createdAt: Date;
+    parentCommentId: string | null;
+    userId: string | null;
+    videoId: string | null;
+  }[];
+};

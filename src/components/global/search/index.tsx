@@ -7,6 +7,7 @@ import { useSearch } from "@/hooks/useSearch";
 import { User } from "lucide-react";
 
 import { inviteMembers } from "@/actions/user";
+import { useState } from "react";
 import Loader from "../loader";
 
 type Props = {
@@ -14,7 +15,8 @@ type Props = {
 };
 
 const Search = ({ workspaceId }: Props) => {
-  const { query, onSearchQuery, isFetching, onUsers } = useSearch(
+  const { query, onSearchQuery, isFetching, onUsers, refetch } = useSearch(
+    workspaceId,
     "get-users",
     "USERS"
   );
@@ -24,6 +26,8 @@ const Search = ({ workspaceId }: Props) => {
     (data: { receiverId: string; email: string }) =>
       inviteMembers(workspaceId, data.receiverId, data.email)
   );
+
+  const [loadingUserId, setLoadingUserId] = useState<string | null>(null);
 
   return (
     <div className="flex flex-col gap-y-5">
@@ -35,7 +39,7 @@ const Search = ({ workspaceId }: Props) => {
         type="text"
       />
 
-      {isFetching ? (
+      {isFetching && !onUsers ? (
         <div className="flex flex-col gap-y-2">
           <Skeleton className="w-full h-8 rounded-xl" />
         </div>
@@ -64,13 +68,23 @@ const Search = ({ workspaceId }: Props) => {
               </div>
               <div className="flex-1 flex justify-end items-center">
                 <Button
-                  onClick={() =>
-                    mutate({ receiverId: user.id, email: user.email })
-                  }
+                  onClick={() => {
+                    setLoadingUserId(user.id);
+                    mutate(
+                      { receiverId: user.id, email: user.email },
+                      {
+                        onSettled: () => setLoadingUserId(null),
+                        onSuccess: () => refetch(),
+                      }
+                    );
+                  }}
                   variant={"default"}
                   className="w-5/12 font-bold"
                 >
-                  <Loader state={isPending} color="#000">
+                  <Loader
+                    state={loadingUserId === user.id && isPending}
+                    color="#000"
+                  >
                     Invite
                   </Loader>
                 </Button>

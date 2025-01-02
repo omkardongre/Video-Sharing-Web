@@ -20,7 +20,7 @@ export const useMoveVideos = (videoId: string, currentWorkspaceId: string) => {
   );
 
   //use mutation data optimistic
-  const { mutate, isPending } = useMutationData(
+  const { mutate, isPending, isSuccess } = useMutationData(
     ["change-video-location"],
     (data: { folder_id: string; workspace_id: string }) =>
       moveVideoLocation(videoId, data.workspace_id, data.folder_id),
@@ -62,6 +62,7 @@ export const useMoveVideos = (videoId: string, currentWorkspaceId: string) => {
     errors,
     register,
     isPending,
+    isSuccess,
     folders,
     workspaces,
     isFetching,

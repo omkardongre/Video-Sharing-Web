@@ -1,3 +1,4 @@
+import scrollbarHide from "tailwind-scrollbar-hide";
 import type { Config } from "tailwindcss";
 import animate from "tailwindcss-animate";
 
@@ -75,7 +76,7 @@ const config = {
       },
     },
   },
-  plugins: [animate],
+  plugins: [animate, scrollbarHide],
 } satisfies Config;
 
 export default config;
