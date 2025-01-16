@@ -12,7 +12,7 @@ const Home = async (props: Props) => {
 
   return (
     <div className="flex items-center justify-center flex-col gap-2">
-      <h1 className="text-2xl font-bold">A Message From The Opal Team</h1>
+      <h1 className="text-2xl font-bold">A Message From The VideoSharing Team</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:w-1/2">
         {videos.status === 200
