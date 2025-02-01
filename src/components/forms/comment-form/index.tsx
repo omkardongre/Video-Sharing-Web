@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useVideoComment } from "@/hooks/useVideo";
 import { useState } from "react";
 import { FormProvider } from "react-hook-form";
+import { Separator } from "@/components/ui/separator";
+import { Label } from "@/components/ui/label";
 
 type Props = {
   videoId: string;
@@ -48,6 +50,7 @@ const CommentForm = ({ videoId, commentId, authorName, isReply, close }: Props) 
             <Button
               type="button"
               variant="secondary"
+              className="bg-secondary text-secondary-foreground"
               onClick={() => {
                 methods.reset({ comment: "" });
                 setShowButtons(false);
@@ -56,7 +59,11 @@ const CommentForm = ({ videoId, commentId, authorName, isReply, close }: Props) 
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={!commentValue.trim() || isPending}>
+            <Button 
+              type="submit" 
+              disabled={!commentValue.trim() || isPending}
+              className="bg-primary text-primary-foreground"
+            >
               <Loader state={isPending}>{isReply ? "Reply" : "Comment"}</Loader>
             </Button>
           </div>

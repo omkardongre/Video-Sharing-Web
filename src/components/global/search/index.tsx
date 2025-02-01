@@ -34,7 +34,7 @@ const Search = ({ workspaceId }: Props) => {
       <Input
         onChange={onSearchQuery}
         value={query}
-        className="bg-transparent border-2 outline-none"
+        className="bg-background border-border border-2 outline-none"
         placeholder="Search for your user..."
         type="text"
       />
@@ -50,7 +50,7 @@ const Search = ({ workspaceId }: Props) => {
           {onUsers.map((user) => (
             <div
               key={user.id}
-              className="flex gap-x-3 items-center border-2 w-full p-3 rounded-xl"
+              className="flex gap-x-3 items-center border-border border-2 w-full p-3 rounded-xl bg-card"
             >
               <Avatar>
                 <AvatarImage src={user.image as string} />
@@ -62,7 +62,7 @@ const Search = ({ workspaceId }: Props) => {
                 <h3 className="text-bold text-lg capitalize">
                   {user.firstName} {user.lastName}
                 </h3>
-                <p className="lowercase text-xs bg-white px-2 rounded-lg text-[#1e1e1e]">
+                <p className="lowercase text-xs bg-background px-2 rounded-lg text-foreground">
                   {user.subscription?.plan}
                 </p>
               </div>

@@ -39,7 +39,7 @@ const SettingsPage = () => {
           <div
             className={cn(
               "rounded-2xl overflow-hidden cursor-pointer border-4 border-transparent",
-              theme == "system" && "border-purple-800"
+              theme == "system" && "border-primary"
             )}
             onClick={() => setTheme("system")}
           >
@@ -48,7 +48,7 @@ const SettingsPage = () => {
           <div
             className={cn(
               "rounded-2xl overflow-hidden cursor-pointer border-4 border-transparent",
-              theme == "light" && "border-purple-800"
+              theme == "light" && "border-primary"
             )}
             onClick={() => setTheme("light")}
           >
@@ -57,7 +57,7 @@ const SettingsPage = () => {
           <div
             className={cn(
               "rounded-2xl overflow-hidden cursor-pointer border-4 border-transparent",
-              theme == "dark" && "border-purple-800"
+              theme == "dark" && "border-primary"
             )}
             onClick={() => setTheme("dark")}
           >

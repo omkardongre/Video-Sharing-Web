@@ -23,25 +23,25 @@ const Notifications = () => {
 
   if (status !== 200) {
     return (
-      <div className="flex justify-center items-center h-full w-full">
+      <div className="flex justify-center items-center h-full w-full text-foreground">
         <p>No Notification</p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-y-2">
       {notifications.notification.map((n) => (
         <div
           key={n.id}
-          className="border-2 flex gap-x-3 items-center rounded-lg p-3"
+          className="border border-border bg-card flex gap-x-3 items-center rounded-lg p-3"
         >
           <Avatar>
-            <AvatarFallback>
+            <AvatarFallback className="bg-muted text-muted-foreground">
               <User />
             </AvatarFallback>
           </Avatar>
-          <p>{n.content}</p>
+          <p className="text-foreground">{n.content}</p>
         </div>
       ))}
     </div>

@@ -45,14 +45,14 @@ export default async function Layout({ children, params }: LayoutProps) {
 
   return (
     <HydrationBoundary state={dehydrate(query)}>
-      <div className="flex h-screen w-screen">
+      <div className="flex h-screen w-screen bg-background">
         <Sidebar activeWorkspaceId={workspaceId} />
         <div className="flex-1 flex flex-col">
           <InfoBar
             userId={auth.user?.id}
             plan={auth.user?.subscription?.plan || "FREE"}
           />
-          <div className="flex-1 pt-8 p-6 overflow-y-auto">
+          <div className="flex-1 pt-8 p-6 overflow-y-auto bg-background text-foreground">
             <GlobalHeader workspace={hasAccess.data.workspace} />
             <div className="mt-4">{children}</div>
           </div>

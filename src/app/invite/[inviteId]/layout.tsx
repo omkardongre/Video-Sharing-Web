@@ -14,5 +14,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     return () => clearTimeout(timer);
   }, [router]);
 
-  return <>{children}</>;
+  return <div className="bg-background text-foreground">{children}</div>;
 }
