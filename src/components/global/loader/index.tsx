@@ -9,10 +9,10 @@ type Props = {
   children?: React.ReactNode;
 };
 
-const Loader = ({ state, className, color, children }: Props) => {
+const Loader = ({ state, className, color="currentColor", children }: Props) => {
   return state ? (
-    <div className={cn(className)}>
-      <Spinner />
+    <div className={cn("flex items-center justify-center", className)}>
+      <Spinner color={color} />
     </div>
   ) : (
     children

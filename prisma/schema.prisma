@@ -87,6 +87,9 @@ model Folder {
   WorkSpace   WorkSpace? @relation(fields: [workSpaceId], references: [id])
   workSpaceId String?    @db.Uuid
   videos      Video[]
+
+  @@unique([name, workSpaceId])
+
 }
 
 model Video {
