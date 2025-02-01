@@ -2,14 +2,14 @@
 
 import VideoRecorderIcon from "@/components/icons/video-recorder";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { UserButton } from "@clerk/nextjs";
-import { Search, UploadIcon } from "lucide-react";
+import { UploadIcon } from "lucide-react";
 import Modal from "../modal";
 import { FileUploadContent } from "../file-upload";
 import { useModal } from "@/hooks/use-modal";
 import { useState } from "react";
 import { RecordingPanel } from "../recording-panel";
+import { SearchBar } from "../search-bar";
 
 const InfoBar = ({
   userId,
@@ -24,13 +24,8 @@ const InfoBar = ({
   return (
     <>
       <header className="sticky p-4 flex items-center justify-between gap-4 w-full bg-background">
-        <div className="flex gap-4 justify-center items-center border-2 border-border rounded-full px-4 w-full max-w-lg">
-          <Search size={25} className="text-muted-foreground" />
-          <Input
-            className="bg-transparent border-none text-foreground !placeholder-muted-foreground"
-            placeholder="Search for people, projects, tags & folders"
-          />
-        </div>
+        <SearchBar />
+
         <div className="flex items-center gap-4 flex-shrink-0">
           <Modal
             trigger={
