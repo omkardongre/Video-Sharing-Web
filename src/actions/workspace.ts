@@ -7,6 +7,8 @@ import {
 } from "@/types/index.type";
 import { currentUser } from "@clerk/nextjs/server";
 import { createClient, OAuthStrategy } from "@wix/sdk";
+import { items } from "@wix/data";
+
 import axios from "axios";
 import { sendEmail } from "./user";
 
@@ -374,15 +376,15 @@ export const getWixContent = async () => {
       }),
     });
 
-    const videos = await myWixClient.items
-      .queryDataItems({
-        dataCollectionId: "opal-videos",
-      })
-      .find();
+    const results = await myWixClient.items.query("video-sharing").find();
 
-    const videoIds = videos.items.map((v) => v.data?.title);
+    if (results.items.length === 0) {
+      return { status: 404 };
+    }
 
-    const video = await client.video.findMany({
+    const videoIds: string[] = results.items.map((v) => v.id);
+
+    const videos = await client.video.findMany({
       where: {
         id: {
           in: videoIds,
@@ -397,8 +399,8 @@ export const getWixContent = async () => {
         workSpaceId: true,
         User: {
           select: {
-            firstname: true,
-            lastname: true,
+            firstName: true,
+            lastName: true,
             image: true,
           },
         },
@@ -411,8 +413,8 @@ export const getWixContent = async () => {
       },
     });
 
-    if (video && video.length > 0) {
-      return { status: 200, data: video };
+    if (videos && videos.length > 0) {
+      return { status: 200, data: videos };
     }
     return { status: 404 };
   } catch (error) {

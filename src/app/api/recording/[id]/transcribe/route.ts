@@ -2,25 +2,36 @@ import { client } from "@/lib/prisma";
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
+interface TranscriptContent {
+  title: string;
+  summary: string;
+}
+
+interface TranscribeRequest {
+  filename: string;
+  content: TranscriptContent;
+  transcript: string;
+}
+
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const body = await req.json();
-    const { id } = await params;
+    const { filename, content, transcript } =
+      (await req.json()) as TranscribeRequest;
 
-    const content = JSON.parse(body.content);
+    const { id } = await params;
 
     const transcribed = await client.video.update({
       where: {
         userId: id,
-        source: body.filename,
+        source: filename,
       },
       data: {
         title: content.title,
         description: content.summary,
-        summary: body.transcript,
+        summary: transcript,
       },
     });
 
@@ -31,7 +42,7 @@ export async function POST(
 
       const options = {
         method: "POST",
-        url: process.env.VOICEFLOW_KNOWLEDGE_BASE_API,
+        url: process.env.VOICEFLOW_KNOWLEDGE_BASE_UPLOAD_URL,
         headers: {
           accept: "application/json",
           "content-type": "application/json",
@@ -41,13 +52,14 @@ export async function POST(
           data: {
             schema: {
               searchableFields: ["title", "transcript"],
-              metadataFields: ["title", "transcript"],
+              metadataFields: ["title", "transcript", "videoId"],
             },
             name: content.title,
             items: [
               {
                 title: content.title,
-                transcript: body.transcript,
+                transcript: transcript,
+                videoId: transcribed.id,
               },
             ],
           },

@@ -1,6 +1,7 @@
 import { getNotifications, onAuthenticateUser } from "@/actions/user";
 import { getWorkSpaces, verifyAccessToWorkspace } from "@/actions/workspace";
 import GlobalHeader from "@/components/global/global-header";
+import InfoBar from "@/components/global/info-bar";
 import Sidebar from "@/components/global/sidebar";
 import {
   dehydrate,
@@ -46,9 +47,15 @@ export default async function Layout({ children, params }: LayoutProps) {
     <HydrationBoundary state={dehydrate(query)}>
       <div className="flex h-screen w-screen">
         <Sidebar activeWorkspaceId={workspaceId} />
-        <div className="w-full pt-28 p-6 overflow-y-scroll overflow-x-hidden">
-          <GlobalHeader workspace={hasAccess.data.workspace} />
-          <div className="mt-4">{children}</div>
+        <div className="flex-1 flex flex-col">
+          <InfoBar
+            userId={auth.user?.id}
+            plan={auth.user?.subscription?.plan || "FREE"}
+          />
+          <div className="flex-1 pt-8 p-6 overflow-y-auto">
+            <GlobalHeader workspace={hasAccess.data.workspace} />
+            <div className="mt-4">{children}</div>
+          </div>
         </div>
       </div>
     </HydrationBoundary>

@@ -12,7 +12,7 @@ import "./globals.css";
 const manrope = DM_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Opal",
+  title: "VS",
   description: "Share AI powered videos with your friends.",
 };
 

@@ -8,7 +8,7 @@ export default function Loading() {
       <div className="flex items-center justify-between p-4 border-b border-neutral-800">
         <div className="flex items-center gap-4">
           <Skeleton className="h-10 w-10 rounded-full" /> {/* Logo */}
-          <Skeleton className="h-8 w-16" /> {/* "Opal" text */}
+          <Skeleton className="h-8 w-16" />
         </div>
 
         {/* Search Bar */}

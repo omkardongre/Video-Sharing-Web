@@ -28,7 +28,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import { useDispatch } from "react-redux";
 import GlobalCard from "../global-card";
-import InfoBar from "../info-bar";
 import Modal from "../modal";
 import PaymentButton from "../payment-button";
 import Search from "../search";
@@ -78,8 +77,8 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
   const SidebarSection = (
     <div className="bg-[#111111] flex-none relative p-4 min-h-screen w-[250px] flex flex-col gap-4 items-center ">
       <div className="bg-[#111111] p-4 flex gap-2 justify-center items-center mb-4 absolute top-0 left-0 right-0 ">
-        <Image src="/opal-logo.svg" height={40} width={40} alt="logo" />
-        <p className="text-2xl">Opal</p>
+        <Image src="/logo.svg" height={40} width={30} alt="logo" className="mr-2"/>
+        <p className="text-2xl">VS</p>
       </div>
       <Select
         defaultValue={activeWorkspaceId}
@@ -206,7 +205,6 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
   );
   return (
     <div className="full">
-      <InfoBar />
       <div className="md:hidden fixed my-4">
         <Sheet>
           <SheetTrigger asChild className="ml-2">

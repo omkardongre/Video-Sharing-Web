@@ -21,6 +21,7 @@ export const onAuthenticateUser = async () => {
       },
       include: {
         workspace: true,
+        subscription: true,
       },
     });
 

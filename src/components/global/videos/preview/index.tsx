@@ -43,8 +43,8 @@ const VideoPreview = ({ videoId }: Props) => {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-3 lg:py-10 overflow-y-auto gap-5">
-      <div className="flex flex-col lg:col-span-2 gap-y-10">
+    <div className="grid grid-cols-1 xl:grid-cols-3 lg:py-5 overflow-y-auto gap-5">
+      <div className="flex flex-col lg:col-span-2">
         <div>
           <div className="flex gap-x-5 items-start justify-between">
             <h2 className="text-white text-4xl font-bold">{video.title}</h2>
@@ -67,7 +67,7 @@ const VideoPreview = ({ videoId }: Props) => {
         </div>
         <video
           preload="metadata"
-          className="w-full aspect-video opacity-50 rounded-xl"
+          className="w-full aspect-video opacity-50 rounded-xl my-10"
           controls
         >
           <source
