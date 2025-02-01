@@ -28,7 +28,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import { useDispatch } from "react-redux";
 import GlobalCard from "../global-card";
-import InfoBar from "../info-bar";
 import Modal from "../modal";
 import PaymentButton from "../payment-button";
 import Search from "../search";
@@ -76,19 +75,19 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
   if (isPending) return <Loading />;
 
   const SidebarSection = (
-    <div className="bg-[#111111] flex-none relative p-4 min-h-screen w-[250px] flex flex-col gap-4 items-center ">
-      <div className="bg-[#111111] p-4 flex gap-2 justify-center items-center mb-4 absolute top-0 left-0 right-0 ">
-        <Image src="/opal-logo.svg" height={40} width={40} alt="logo" />
-        <p className="text-2xl">Opal</p>
+    <div className="bg-card flex-none relative p-4 min-h-screen w-[250px] flex flex-col gap-4 items-center">
+      <div className="bg-card p-4 flex gap-2 justify-center items-center mb-4 absolute top-0 left-0 right-0">
+        <Image src="/logo.svg" height={40} width={30} alt="logo" className="mr-2"/>
+        <p className="text-2xl text-foreground">VS</p>
       </div>
       <Select
         defaultValue={activeWorkspaceId}
         onValueChange={onChangeActiveWorkspace}
       >
-        <SelectTrigger className="mt-16 text-neutral-400 bg-transparent">
+        <SelectTrigger className="mt-16 text-muted-foreground bg-transparent">
           <SelectValue placeholder="Select a workspace"></SelectValue>
         </SelectTrigger>
-        <SelectContent className="bg-[#111111] backdrop-blur-xl">
+        <SelectContent className="bg-card backdrop-blur-xl">
           <SelectGroup>
             <SelectLabel>Workspaces</SelectLabel>
             <Separator />
@@ -132,7 +131,7 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
             <Search workspaceId={activeWorkspaceId} />
           </Modal>
         )}
-      <p className="w-full text-[#9D9D9D] font-bold mt-4">Menu</p>
+      <p className="w-full text-muted-foreground font-bold mt-4">Menu</p>
       <nav className="w-full">
         <ul>
           {menuItems.map((item) => (
@@ -147,11 +146,11 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
         </ul>
       </nav>
       <Separator className="w-4/5" />
-      <p className="w-full text-[#9D9D9D] font-bold mt-4 ">Workspaces</p>
+      <p className="w-full text-muted-foreground font-bold mt-4 ">Workspaces</p>
 
       {workspace.workspace.length === 1 && workspace.members.length === 0 && (
         <div className="w-full mt-[-10px]">
-          <p className="text-[#3c3c3c] font-medium text-sm">
+          <p className="text-muted-foreground font-medium text-sm">
             {workspace.subscription?.plan === SubscriptionPlan.FREE
               ? "Upgrade to create workspaces"
               : "No Workspaces"}
@@ -206,7 +205,6 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
   );
   return (
     <div className="full">
-      <InfoBar />
       <div className="md:hidden fixed my-4">
         <Sheet>
           <SheetTrigger asChild className="ml-2">

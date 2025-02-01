@@ -2,14 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ErrorMessage } from "@hookform/error-message";
-import { useEffect, useState } from "react";
-import {
-  FieldErrors,
-  FieldValues,
-  useFormContext,
-  UseFormRegister,
-  useWatch,
-} from "react-hook-form";
+import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
 
 type Props = {
   type?: "text" | "email" | "password" | "number";
@@ -22,7 +15,8 @@ type Props = {
   name: string;
   errors: FieldErrors<FieldValues>;
   lines?: number;
-  checkExists?: (name: string) => Promise<{ status: number; message: string }>;
+  defaultValue?: string;
+  onFocus?: () => void;
 };
 
 const FormGenerator = ({
@@ -35,50 +29,14 @@ const FormGenerator = ({
   errors,
   type,
   lines,
-  checkExists,
+  defaultValue,
+  onFocus,
 }: Props) => {
-  const [debouncedValue, setDebouncedValue] = useState("");
-  const watchedValue = useWatch({ name });
-  const { setError, clearErrors } = useFormContext();
-
-  useEffect(() => {
-    console.log("watchedValue is changing : ", watchedValue);
-    const handler = setTimeout(() => {
-      setDebouncedValue(watchedValue);
-    }, 600);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [watchedValue]);
-
-  useEffect(() => {
-    const createFolder = async () => {
-      try {
-        if (checkExists) {
-          const result = await checkExists(debouncedValue);
-          console.log(result);
-          if (result.status >= 400) {
-            setError(name, { type: "manual", message: result.message });
-          } else {
-            clearErrors(name);
-          }
-        }
-      } catch {
-        console.error("Oops something went wrong");
-      }
-    };
-
-    if (debouncedValue) {
-      createFolder();
-    }
-  }, [debouncedValue, checkExists, clearErrors, name, setError]);
-
   switch (inputType) {
     case "input":
       return (
         <Label
-          className="flex flex-col gap-2 text-[#9D9D9D]"
+          className="flex flex-col gap-2 text-[#9D9D9D] border-2 border-gray-800"
           htmlFor={`input-${label}`}
         >
           {label && label}
@@ -86,6 +44,8 @@ const FormGenerator = ({
             id={`input-${label}`}
             type={type}
             placeholder={placeholder}
+            defaultValue={defaultValue}
+            onFocus={onFocus}
             className="bg-transparent border-themeGray text-themeTextGray"
             {...register(name)}
           />

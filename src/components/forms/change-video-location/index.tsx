@@ -10,7 +10,7 @@ type Props = {
   currentFolderId?: string;
   currentWorkspaceId?: string;
   currentFolderName?: string;
-  onSuccess?: () => void;
+  onSuccess: () => void;
 };
 
 const ChangeVideoLocation = ({
@@ -19,14 +19,8 @@ const ChangeVideoLocation = ({
   currentWorkspaceId,
   onSuccess,
 }: Props) => {
-  const {
-    register,
-    isPending,
-    onFormSubmit,
-    folders,
-    workspaces,
-    isFolders,
-  } = useMoveVideos(videoId, currentWorkspaceId!);
+  const { register, isPending, onFormSubmit, folders, workspaces, isFolders } =
+    useMoveVideos(videoId, currentWorkspaceId!);
 
   const folder = folders.find((f) => f.id === currentFolderId);
   const workspace = workspaces.find((f) => f.id === currentWorkspaceId);
@@ -34,7 +28,7 @@ const ChangeVideoLocation = ({
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       await onFormSubmit(e);
-      onSuccess?.();
+      onSuccess();
     },
     [onFormSubmit, onSuccess]
   );

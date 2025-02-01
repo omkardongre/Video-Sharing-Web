@@ -1,31 +1,69 @@
+"use client";
+
 import VideoRecorderIcon from "@/components/icons/video-recorder";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { UserButton } from "@clerk/nextjs";
-import { Search, UploadIcon } from "lucide-react";
+import { UploadIcon } from "lucide-react";
+import Modal from "../modal";
+import { FileUploadContent } from "../file-upload";
+import { useModal } from "@/hooks/use-modal";
+import { useState } from "react";
+import { RecordingPanel } from "../recording-panel";
+import { SearchBar } from "../search-bar";
 
-const InfoBar = () => {
+const InfoBar = ({
+  userId,
+  plan,
+}: {
+  userId: string;
+  plan: "FREE" | "PRO";
+}) => {
+  const { isOpen, closeModal, setModalOpen } = useModal();
+  const [isRecordOpen, setIsRecordOpen] = useState(false);
+
   return (
-    <header className="pl-20 md:pl-[265px] fixed p-4 w-full flex items-center justify-between gap-4">
-      <div className="flex gap-4 justify-center items-center border-2 rounded-full px-4 w-full max-w-lg">
-        <Search size={25} className="text-[#707070]" />
-        <Input
-          className="bg-transparent border-none !placeholder-neutral-500"
-          placeholder="Search for people, projects, tags & folders"
-        />
-      </div>
-      <div className="flex items-center gap-4">
-        <Button className="bg-[#9D9D9D] flex items-center gap-2">
-          <UploadIcon size={20} />{" "}
-          <span className="flex items-center gap-2">Upload</span>
-        </Button>
-        <Button className="bg-[#9D9D9D] flex items-center gap-2">
-          <VideoRecorderIcon />
-          <span className="flex items-center gap-2">Record</span>
-        </Button>
-        <UserButton />
-      </div>
-    </header>
+    <>
+      <header className="sticky p-4 flex items-center justify-between gap-4 w-full bg-background">
+        <SearchBar />
+
+        <div className="flex items-center gap-4 flex-shrink-0">
+          <Modal
+            trigger={
+              <Button className="bg-primary text-primary-foreground flex items-center gap-2">
+                <UploadIcon size={20} />
+                <span>Upload</span>
+              </Button>
+            }
+            title=""
+            description=""
+            isOpen={isOpen}
+            setIsOpen={setModalOpen}
+          >
+            <FileUploadContent
+              onClose={closeModal}
+              userId={userId}
+              plan={plan}
+            />
+          </Modal>
+
+          <Button
+            className="bg-primary text-primary-foreground flex items-center gap-2"
+            onClick={() => setIsRecordOpen(!isRecordOpen)}
+          >
+            <VideoRecorderIcon />
+            <span>Record</span>
+          </Button>
+
+          <UserButton />
+        </div>
+      </header>
+
+      <RecordingPanel
+        isOpen={isRecordOpen}
+        onClose={() => setIsRecordOpen(false)}
+        userId={userId}
+      />
+    </>
   );
 };
 

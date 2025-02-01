@@ -7,6 +7,7 @@ import { useSearch } from "@/hooks/useSearch";
 import { User } from "lucide-react";
 
 import { inviteMembers } from "@/actions/user";
+import { useState } from "react";
 import Loader from "../loader";
 
 type Props = {
@@ -14,7 +15,8 @@ type Props = {
 };
 
 const Search = ({ workspaceId }: Props) => {
-  const { query, onSearchQuery, isFetching, onUsers } = useSearch(
+  const { query, onSearchQuery, isFetching, onUsers, refetch } = useSearch(
+    workspaceId,
     "get-users",
     "USERS"
   );
@@ -25,17 +27,19 @@ const Search = ({ workspaceId }: Props) => {
       inviteMembers(workspaceId, data.receiverId, data.email)
   );
 
+  const [loadingUserId, setLoadingUserId] = useState<string | null>(null);
+
   return (
     <div className="flex flex-col gap-y-5">
       <Input
         onChange={onSearchQuery}
         value={query}
-        className="bg-transparent border-2 outline-none"
+        className="bg-background border-border border-2 outline-none"
         placeholder="Search for your user..."
         type="text"
       />
 
-      {isFetching ? (
+      {isFetching && !onUsers ? (
         <div className="flex flex-col gap-y-2">
           <Skeleton className="w-full h-8 rounded-xl" />
         </div>
@@ -46,7 +50,7 @@ const Search = ({ workspaceId }: Props) => {
           {onUsers.map((user) => (
             <div
               key={user.id}
-              className="flex gap-x-3 items-center border-2 w-full p-3 rounded-xl"
+              className="flex gap-x-3 items-center border-border border-2 w-full p-3 rounded-xl bg-card"
             >
               <Avatar>
                 <AvatarImage src={user.image as string} />
@@ -58,19 +62,29 @@ const Search = ({ workspaceId }: Props) => {
                 <h3 className="text-bold text-lg capitalize">
                   {user.firstName} {user.lastName}
                 </h3>
-                <p className="lowercase text-xs bg-white px-2 rounded-lg text-[#1e1e1e]">
+                <p className="lowercase text-xs bg-background px-2 rounded-lg text-foreground">
                   {user.subscription?.plan}
                 </p>
               </div>
               <div className="flex-1 flex justify-end items-center">
                 <Button
-                  onClick={() =>
-                    mutate({ receiverId: user.id, email: user.email })
-                  }
+                  onClick={() => {
+                    setLoadingUserId(user.id);
+                    mutate(
+                      { receiverId: user.id, email: user.email },
+                      {
+                        onSettled: () => setLoadingUserId(null),
+                        onSuccess: () => refetch(),
+                      }
+                    );
+                  }}
                   variant={"default"}
                   className="w-5/12 font-bold"
                 >
-                  <Loader state={isPending} color="#000">
+                  <Loader
+                    state={loadingUserId === user.id && isPending}
+                    color="#000"
+                  >
                     Invite
                   </Loader>
                 </Button>

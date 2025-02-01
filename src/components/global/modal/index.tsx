@@ -14,8 +14,8 @@ type Props = {
   title: string;
   description: string;
   className?: string;
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
+  isOpen?: boolean;
+  setIsOpen?: (open: boolean) => void;
 };
 
 const Modal = ({
@@ -24,11 +24,11 @@ const Modal = ({
   title,
   trigger,
   className,
-  open,
-  onOpenChange,
+  isOpen,
+  setIsOpen,
 }: Props) => {
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger className={className} asChild>
         {trigger}
       </DialogTrigger>

@@ -6,15 +6,15 @@ import FolderPlusDuotine from "@/components/icons/folder-plus-duotone";
 import { Button } from "@/components/ui/button";
 import { useQueryData } from "@/hooks/useQueryData";
 
+import { useModal } from "@/hooks/use-modal";
 import {
   UserWorkspaceDetails,
   UserWorkspaceResponse,
 } from "@/types/index.type";
-import { useState } from "react";
 import Modal from "../modal";
 
 const CreateWorkspace = () => {
-  const [open, setOpen] = useState(false);
+  const { isOpen, closeModal, setModalOpen } = useModal();
   const { data: userWorkspaceResponse } = useQueryData(
     ["user-workspaces"],
     getWorkSpaces
@@ -29,10 +29,10 @@ const CreateWorkspace = () => {
   if (userWorkspaceDetails.subscription?.plan === "PRO")
     return (
       <Modal
-        open={open}
-        onOpenChange={setOpen}
         title="Create a Workspace"
         description=" Workspaces helps you collaborate with team members. You are assigned a default personal workspace where you can share videos in private with yourself."
+        isOpen={isOpen}
+        setIsOpen={setModalOpen}
         trigger={
           <Button className="bg-[#1D1D1D] text-[#707070] flex items-center gap-2 py-6 px-4 rounded-2xl">
             <FolderPlusDuotine />
@@ -40,7 +40,7 @@ const CreateWorkspace = () => {
           </Button>
         }
       >
-        <WorkspaceForm onSuccess={() => setOpen(false)} />
+        <WorkspaceForm onSuccess={closeModal} />
       </Modal>
     );
 };

@@ -3,6 +3,9 @@
 import { client } from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 import nodemailer from "nodemailer";
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_CLIENT_SECRET as string);
 
 export const onAuthenticateUser = async () => {
   try {
@@ -18,6 +21,7 @@ export const onAuthenticateUser = async () => {
       },
       include: {
         workspace: true,
+        subscription: true,
       },
     });
 
@@ -121,10 +125,10 @@ export const getNotifications = async () => {
   }
 };
 
-export const searchUsers = async (query: string) => {
+export const searchUsers = async (query: string, workspaceId: string) => {
   try {
     const user = await currentUser();
-    if (!user) return { status: 404 };
+    if (!user) return { status: 404, data: [] };
 
     const users = await client.user.findMany({
       where: {
@@ -133,7 +137,24 @@ export const searchUsers = async (query: string) => {
           { email: { contains: query } },
           { lastName: { contains: query } },
         ],
-        NOT: [{ clerkId: user.id }],
+        NOT: [
+          { clerkId: user.id },
+          {
+            receiver: {
+              some: {
+                workSpaceId: workspaceId,
+                status: "WAITING",
+              },
+            },
+          },
+          {
+            members: {
+              some: {
+                workSpaceId: workspaceId,
+              },
+            },
+          },
+        ],
       },
       select: {
         id: true,
@@ -153,16 +174,16 @@ export const searchUsers = async (query: string) => {
       return { status: 200, data: users };
     }
 
-    return { status: 404, data: undefined };
+    return { status: 404, data: [] };
   } catch {
-    return { status: 500, data: undefined };
+    return { status: 500, data: [] };
   }
 };
 
 export const inviteMembers = async (
   workspaceId: string,
   receiverId: string,
-  email: string
+  receiverEmail: string
 ) => {
   try {
     const user = await currentUser();
@@ -213,12 +234,39 @@ export const inviteMembers = async (
         });
         if (invitation) {
           const { transporter, mailOptions } = await sendEmail(
-            email,
-            "You got an invitation",
-            `You are invited to join ${workspace.name} Workspace, click accept to confirm`,
-            `<a href="${process.env.NEXT_PUBLIC_HOST_URL}/invite/${invitation.id}" style="background-color: #000; padding: 5px 10px; border-radius: 10px;">Accept Invite</a>`
+            receiverEmail,
+            `Join ${workspace.name} Workspace - Invitation`,
+            `${user.firstName} has invited you to join ${workspace.name} Workspace`,
+            `
+            <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto;">
+              <h2 style="color: #333; margin-bottom: 20px;">Workspace Invitation</h2>
+              <p style="color: #666; margin-bottom: 20px;">
+                ${user.firstName} has invited you to join <strong>${workspace.name}</strong> Workspace.
+              </p>
+              <div style="margin: 30px 0;">
+                <a 
+                  href="${process.env.NEXT_PUBLIC_HOST_URL}/invite/${invitation.id}"
+                  style="
+                    background-color: #0070f3;
+                    color: white;
+                    padding: 12px 24px;
+                    border-radius: 6px;
+                    text-decoration: none;
+                    display: inline-block;
+                    font-weight: 500;
+                  "
+                >
+                  Accept Invitation
+                </a>
+              </div>
+              <p style="color: #666; font-size: 14px;">
+                If you're unable to click the button, copy and paste this URL into your browser:
+                <br>
+                ${process.env.NEXT_PUBLIC_HOST_URL}/invite/${invitation.id}
+              </p>
+            </div>
+          `
           );
-
           transporter.sendMail(mailOptions, (error) => {
             if (error) {
               console.log("🔴", error.message);
@@ -233,8 +281,255 @@ export const inviteMembers = async (
       return { status: 404, data: "workspace not found" };
     }
     return { status: 404, data: "recipient not found" };
-  } catch (error) {
-    console.log(error);
+  } catch {
     return { status: 400, data: "Oops! something went wrong" };
+  }
+};
+
+export const getPaymentInfo = async () => {
+  try {
+    const user = await currentUser();
+    if (!user) return { status: 404 };
+
+    const payment = await client.user.findUnique({
+      where: {
+        clerkId: user.id,
+      },
+      select: {
+        subscription: {
+          select: { plan: true },
+        },
+      },
+    });
+    if (payment) {
+      return { status: 200, data: payment };
+    }
+  } catch {
+    return { status: 400 };
+  }
+};
+export const completeSubscription = async (session_id: string) => {
+  try {
+    const user = await currentUser();
+    if (!user) return { status: 404 };
+
+    const session = await stripe.checkout.sessions.retrieve(session_id);
+    if (session) {
+      const customer = await client.user.update({
+        where: {
+          clerkId: user.id,
+        },
+        data: {
+          subscription: {
+            update: {
+              data: {
+                customerId: session.customer as string,
+                plan: "PRO",
+              },
+            },
+          },
+        },
+      });
+      if (customer) {
+        return { status: 200 };
+      }
+    }
+    return { status: 404 };
+  } catch {
+    return { status: 400 };
+  }
+};
+
+export const enableFirstView = async (state: boolean) => {
+  try {
+    const user = await currentUser();
+
+    if (!user) return { status: 404, data: "User not found" };
+
+    const view = await client.user.update({
+      where: {
+        clerkId: user.id,
+      },
+      data: {
+        firstView: state,
+      },
+    });
+
+    if (view) {
+      return { status: 200, data: "Setting updated" };
+    }
+  } catch {
+    return { status: 400, data: "Failed to update" };
+  }
+};
+
+export const getFirstView = async () => {
+  try {
+    const user = await currentUser();
+    if (!user) return { status: 404, data: false };
+    const userData = await client.user.findUnique({
+      where: {
+        clerkId: user.id,
+      },
+      select: {
+        firstView: true,
+      },
+    });
+    if (userData) {
+      return { status: 200, data: userData.firstView };
+    }
+    return { status: 400, data: false };
+  } catch {
+    return { status: 400, data: false };
+  }
+};
+export const acceptInvite = async (inviteId: string) => {
+  try {
+    const user = await currentUser();
+    if (!user)
+      return {
+        status: 404,
+      };
+    const invitation = await client.invite.findUnique({
+      where: {
+        id: inviteId,
+      },
+      select: {
+        workSpaceId: true,
+        receiver: {
+          select: {
+            clerkId: true,
+          },
+        },
+        status: true,
+      },
+    });
+
+    if (!invitation) {
+      return { status: 404 };
+    }
+
+    if (user.id !== invitation.receiver?.clerkId) return { status: 401 };
+
+    if (invitation.status === "ACCEPTED") {
+      return { status: 409, message: "Invitation already accepted" };
+    }
+
+    const acceptInvite = client.invite.update({
+      where: {
+        id: inviteId,
+      },
+      data: {
+        status: "ACCEPTED",
+      },
+    });
+
+    const updateMember = client.user.update({
+      where: {
+        clerkId: user.id,
+      },
+      data: {
+        members: {
+          create: {
+            workSpaceId: invitation.workSpaceId,
+          },
+        },
+      },
+    });
+
+    const membersTransaction = await client.$transaction([
+      acceptInvite,
+      updateMember,
+    ]);
+
+    if (membersTransaction) {
+      return { status: 200 };
+    }
+    return { status: 400 };
+  } catch {
+    return { status: 400 };
+  }
+};
+
+export const getUserProfile = async () => {
+  try {
+    const user = await currentUser();
+    if (!user) return { status: 404, data: null };
+    const profileIdAndImage = await client.user.findUnique({
+      where: {
+        clerkId: user.id,
+      },
+      select: {
+        image: true,
+        id: true,
+      },
+    });
+
+    if (profileIdAndImage) return { status: 200, data: profileIdAndImage };
+  } catch {
+    return { status: 400, data: null };
+  }
+};
+
+export const getVideoComments = async (videoId: string) => {
+  try {
+    const comments = await client.comment.findMany({
+      where: {
+        videoId: videoId,
+        parentComment: null,
+      },
+      include: {
+        replies: {
+          include: {
+            User: true,
+          },
+        },
+        User: true,
+      },
+    });
+
+    return { status: 200, data: comments };
+  } catch {
+    return { status: 400, data: [] };
+  }
+};
+
+export const createCommentAndReply = async (
+  userId: string,
+  content: string,
+  videoId: string,
+  commentId?: string | undefined
+) => {
+  try {
+    if (commentId) {
+      const reply = await client.comment.update({
+        where: {
+          id: commentId,
+        },
+        data: {
+          replies: {
+            create: {
+              content,
+              userId,
+              videoId,
+            },
+          },
+        },
+      });
+      if (reply) {
+        return { status: 200, data: "Reply posted" };
+      }
+    }
+
+    const newComment = await client.comment.create({
+      data: {
+        content,
+        userId,
+        videoId,
+      },
+    });
+    if (newComment) return { status: 200, data: "New comment added" };
+  } catch {
+    return { status: 400 };
   }
 };

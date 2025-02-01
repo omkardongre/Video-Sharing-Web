@@ -16,15 +16,15 @@ const CardMenu = ({
   currentFolderName,
   currentWorkspaceId,
 }: Props) => {
-  const { isOpen, onClose, onToggle } = useModal();
+  const { isOpen, closeModal, setModalOpen } = useModal();
 
   return (
     <Modal
-      open={isOpen}
-      onOpenChange={onToggle}
       className="flex items-center cursor-pointer gap-x-2"
       title="Move to new Workspace/Folder"
       description="Select a new workspace or folder to move this video. The video will be immediately available in the new location."
+      isOpen={isOpen}
+      setIsOpen={setModalOpen}
       trigger={<Move size={20} fill="#4f4f4f" className="text-[#4f4f4f]" />}
     >
       <ChangeVideoLocation
@@ -32,7 +32,7 @@ const CardMenu = ({
         currentWorkspaceId={currentWorkspaceId}
         videoId={videoId}
         currentFolderName={currentFolderName}
-        onSuccess={onClose}
+        onSuccess={closeModal}
       />
     </Modal>
   );

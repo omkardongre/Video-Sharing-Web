@@ -7,14 +7,14 @@ export default function Loading() {
       {/* Top Navigation */}
       <div className="flex items-center justify-between p-4 border-b border-neutral-800">
         <div className="flex items-center gap-4">
-          <Skeleton className="h-10 w-10 rounded-full" /> {/* Logo */}
-          <Skeleton className="h-8 w-16" /> {/* "Opal" text */}
+          <Skeleton className="h-10 w-10 rounded-full bg-muted" /> {/* Logo */}
+          <Skeleton className="h-8 w-16 bg-muted" />
         </div>
 
         {/* Search Bar */}
         <div className="relative flex-1 mx-8">
           <Search
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
             size={20}
           />
           <Skeleton className="h-10 w-full max-w-2xl rounded-md bg-neutral-800" />
@@ -29,7 +29,7 @@ export default function Loading() {
 
       <div className="flex">
         {/* Sidebar */}
-        <div className="w-[250px] p-4 border-r border-neutral-800">
+        <div className="w-[250px] p-4 border-r border-border">
           {/* Menu Items */}
         </div>
 

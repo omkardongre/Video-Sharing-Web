@@ -1,4 +1,3 @@
-import { checkWorkspaceExists } from "@/actions/workspace";
 import FormGenerator from "@/components/global/form-generator";
 import Loader from "@/components/global/loader";
 import { Button } from "@/components/ui/button";
@@ -30,10 +29,6 @@ const WorkspaceForm = ({ onSuccess }: Props) => {
           errors={methods.formState.errors}
           inputType="input"
           type="text"
-          checkExists={async (name: string) => {
-            const result = await checkWorkspaceExists(name);
-            return result;
-          }}
         />
         <Button
           className="text-sm w-full mt-2"

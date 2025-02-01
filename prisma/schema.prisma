@@ -16,8 +16,8 @@ datasource db {
 model User {
   id           String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email        String         @unique
-  firstName    String?
-  lastName     String?
+  firstName    String
+  lastName     String
   createdAt    DateTime       @default(now())
   clerkId      String         @unique
   studio       Media?
@@ -35,16 +35,16 @@ model User {
 }
 
 model Comment {
-  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  content       String
-  replies       Comment[] @relation("reply")
-  parentComment Comment?  @relation("reply", fields: [commentId], references: [id])
-  commentId     String?   @db.Uuid
-  User          User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        String?   @db.Uuid
-  Video         Video?    @relation(fields: [videoId], references: [id], onDelete: Cascade)
-  videoId       String?   @db.Uuid
-  createdAt     DateTime  @default(now())
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  content         String
+  replies         Comment[] @relation("reply")
+  parentComment   Comment?  @relation("reply", fields: [parentCommentId], references: [id])
+  parentCommentId String?   @db.Uuid
+  User            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String    @db.Uuid
+  Video           Video?    @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  videoId         String?   @db.Uuid
+  createdAt       DateTime  @default(now())
 }
 
 model Subscription {
@@ -89,7 +89,6 @@ model Folder {
   videos      Video[]
 
   @@unique([name, workSpaceId])
-
 }
 
 model Video {
@@ -100,8 +99,8 @@ model Video {
   createdAt   DateTime   @default(now())
   Folder      Folder?    @relation(fields: [folderId], references: [id], onDelete: Cascade)
   folderId    String?    @db.Uuid
-  User        User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String?    @db.Uuid
+  User        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String     @db.Uuid
   processing  Boolean    @default(true)
   WorkSpace   WorkSpace? @relation(fields: [workSpaceId], references: [id], onDelete: Cascade)
   workSpaceId String?    @db.Uuid
@@ -128,15 +127,15 @@ model Notification {
 }
 
 model Invite {
-  id          String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  sender      User?      @relation("sender", fields: [senderId], references: [id])
-  senderId    String?    @db.Uuid
-  receiver    User?      @relation("receiver", fields: [receiverId], references: [id])
-  receiverId  String?    @db.Uuid
+  id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sender      User?        @relation("sender", fields: [senderId], references: [id])
+  senderId    String?      @db.Uuid
+  receiver    User?        @relation("receiver", fields: [receiverId], references: [id])
+  receiverId  String?      @db.Uuid
   content     String
-  WorkSpace   WorkSpace? @relation(fields: [workSpaceId], references: [id])
-  workSpaceId String?    @db.Uuid
-  accepted    Boolean    @default(false)
+  WorkSpace   WorkSpace?   @relation(fields: [workSpaceId], references: [id])
+  workSpaceId String?      @db.Uuid
+  status      InviteStatus @default(WAITING)
 }
 
 enum Type {
@@ -152,4 +151,10 @@ enum PRESET {
 enum SUBSCRIPTION_PLAN {
   PRO
   FREE
+}
+
+enum InviteStatus {
+  WAITING
+  ACCEPTED
+  DECLINED
 }
