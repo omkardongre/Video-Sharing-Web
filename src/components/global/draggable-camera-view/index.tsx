@@ -26,10 +26,10 @@ export const DraggableCameraView = ({
 
   useEffect(() => {
     const handleResize = () => {
-      setPosition(prev => ({
+      setPosition({
         x: window.innerWidth - 330,
         y: window.innerHeight - 200,
-      }));
+      });
     };
 
     window.addEventListener('resize', handleResize);

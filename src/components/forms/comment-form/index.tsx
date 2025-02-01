@@ -5,8 +5,6 @@ import { Button } from "@/components/ui/button";
 import { useVideoComment } from "@/hooks/useVideo";
 import { useState } from "react";
 import { FormProvider } from "react-hook-form";
-import { Separator } from "@/components/ui/separator";
-import { Label } from "@/components/ui/label";
 
 type Props = {
   videoId: string;

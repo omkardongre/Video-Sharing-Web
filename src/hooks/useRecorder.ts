@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { Socket } from "socket.io-client";
 import Deque from "double-ended-queue";
 import { toast } from "sonner";

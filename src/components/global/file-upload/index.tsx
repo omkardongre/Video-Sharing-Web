@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { UploadCloud, AlertCircle, CheckCircle2 } from "lucide-react";
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import * as tus from "tus-js-client";
 import { Progress } from "@/components/ui/progress";
 

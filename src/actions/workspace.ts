@@ -300,8 +300,7 @@ export const checkFolderExists = async (
       status: 200,
       message: "Folder name is available",
     };
-  } catch (error) {
-    console.error("[Folder Check Error]:", error);
+  } catch {
     return {
       status: 500,
       message: "Failed to check folder existence",
@@ -339,8 +338,7 @@ export const createFolder = async (
       status: 200,
       message: `Folder "${name}" created successfully`,
     };
-  } catch (error) {
-    console.error("[Folder Creation Error]:", error);
+  } catch {
     return {
       status: 500,
       message: "Failed to create folder",
@@ -417,8 +415,7 @@ export const getWixContent = async () => {
       return { status: 200, data: videos };
     }
     return { status: 404 };
-  } catch (error) {
-    console.log(error);
+  } catch {
     return { status: 400 };
   }
 };
@@ -552,8 +549,7 @@ export const sendEmailForFirstView = async (videoId: string) => {
         }
       });
     }
-  } catch (error) {
-    console.log(error);
+  } catch {
     return { status: 400, data: "Oops! something went wrong" };
   }
 };
@@ -602,7 +598,7 @@ export const getFolderInfo = async (folderId: string) => {
       status: 400,
       data: null,
     };
-  } catch (error) {
+  } catch {
     return {
       status: 500,
       data: null,
