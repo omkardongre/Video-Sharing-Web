@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Menu, User } from "lucide-react";
+import { User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -7,7 +7,7 @@ const LandingPageNavBar = () => {
   return (
     <div className="flex w-full justify-between items-center">
       <div className="text-3xl font-semibold flex items-center gap-x-3">
-        <Menu className="w-8 h-8" />
+        {/* <Menu className="w-8 h-8" /> */}
         <Image alt="logo" src="/logo.svg" width={40} height={40}/>
         Video Sharing
       </div>
@@ -18,8 +18,8 @@ const LandingPageNavBar = () => {
         >
           Home
         </Link>
-        <Link href="/">Pricing</Link>
-        <Link href="/">Contact</Link>
+        <Link href="/pricing">Pricing</Link>
+        <Link href="/contact">Contact</Link>
       </div>
       <Link href="/auth/sign-in">
         <Button className="text-base flex gap-x-2">

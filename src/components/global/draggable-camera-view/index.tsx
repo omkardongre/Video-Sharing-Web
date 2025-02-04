@@ -13,10 +13,14 @@ export const DraggableCameraView = ({
   isVisible,
 }: DraggableCameraViewProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [position, setPosition] = useState({
-    x: window.innerWidth - 330,
-    y: window.innerHeight - 200,
-  });
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    setPosition({
+      x: window.innerWidth - 330,
+      y: window.innerHeight - 200,
+    });
+  }, []);
 
   useEffect(() => {
     if (videoRef.current && videoStream) {

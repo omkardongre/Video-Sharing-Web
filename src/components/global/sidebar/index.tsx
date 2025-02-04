@@ -78,7 +78,7 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
     <div className="bg-card flex-none relative p-4 min-h-screen w-[250px] flex flex-col gap-4 items-center">
       <div className="bg-card p-4 flex gap-2 justify-center items-center mb-4 absolute top-0 left-0 right-0">
         <Image src="/logo.svg" height={40} width={30} alt="logo" className="mr-2"/>
-        <p className="text-2xl text-foreground">VS</p>
+        <p className="text-2xl text-foreground">Video Sharing</p>
       </div>
       <Select
         defaultValue={activeWorkspaceId}

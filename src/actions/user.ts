@@ -15,9 +15,12 @@ export const onAuthenticateUser = async () => {
       return { status: 403 };
     }
 
-    const userExist = await client.user.findUnique({
+    const userExist = await client.user.findFirst({
       where: {
-        clerkId: user.id,
+        OR: [
+          { clerkId: user.id },
+          { email: user.emailAddresses[0]?.emailAddress },
+        ],
       },
       include: {
         workspace: true,
