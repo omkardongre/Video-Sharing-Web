@@ -55,7 +55,7 @@ export const getWorkSpaces = async () => {
   try {
     const user = await currentUser();
 
-    if (!user) return { status: 404 };
+    if (!user) return { status: 404, data: null };
 
     const workspaces = await client.user.findUnique({
       where: {
@@ -91,6 +91,7 @@ export const getWorkSpaces = async () => {
     if (workspaces) {
       return { status: 200, data: workspaces };
     }
+    return { status: 404, data: null };
   } catch {
     return { status: 400 };
   }
