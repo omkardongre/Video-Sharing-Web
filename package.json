@@ -1,10 +1,12 @@
 {
-  "name": "vs-webprodigies",
+  "name": "video-sharing-web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "prebuild": "bunx prisma generate",
     "build": "next build",
+    "postinstall": "bunx prisma generate",
     "start": "next start",
     "lint": "next lint"
   },

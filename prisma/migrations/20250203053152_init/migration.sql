@@ -7,12 +7,15 @@ CREATE TYPE "PRESET" AS ENUM ('HD', 'SD');
 -- CreateEnum
 CREATE TYPE "SUBSCRIPTION_PLAN" AS ENUM ('PRO', 'FREE');
 
+-- CreateEnum
+CREATE TYPE "InviteStatus" AS ENUM ('WAITING', 'ACCEPTED', 'DECLINED');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "email" TEXT NOT NULL,
-    "firstName" TEXT,
-    "lastName" TEXT,
+    "firstName" TEXT NOT NULL,
+    "lastName" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "clerkId" TEXT NOT NULL,
     "image" TEXT,
@@ -25,9 +28,9 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Comment" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "comment" TEXT NOT NULL,
-    "commentId" UUID,
-    "userId" UUID,
+    "content" TEXT NOT NULL,
+    "parentCommentId" UUID,
+    "userId" UUID NOT NULL,
     "videoId" UUID,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -87,11 +90,11 @@ CREATE TABLE "Video" (
     "source" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "folderId" UUID,
-    "userId" UUID,
+    "userId" UUID NOT NULL,
     "processing" BOOLEAN NOT NULL DEFAULT true,
     "workSpaceId" UUID,
     "views" INTEGER NOT NULL DEFAULT 0,
-    "summery" TEXT,
+    "summary" TEXT,
 
     CONSTRAINT "Video_pkey" PRIMARY KEY ("id")
 );
@@ -123,7 +126,7 @@ CREATE TABLE "Invite" (
     "receiverId" UUID,
     "content" TEXT NOT NULL,
     "workSpaceId" UUID,
-    "accepted" BOOLEAN NOT NULL DEFAULT false,
+    "status" "InviteStatus" NOT NULL DEFAULT 'WAITING',
 
     CONSTRAINT "Invite_pkey" PRIMARY KEY ("id")
 );
@@ -144,10 +147,13 @@ CREATE UNIQUE INDEX "Subscription_customerId_key" ON "Subscription"("customerId"
 CREATE UNIQUE INDEX "Media_userId_key" ON "Media"("userId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Folder_name_workSpaceId_key" ON "Folder"("name", "workSpaceId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Video_source_key" ON "Video"("source");
 
 -- AddForeignKey
-ALTER TABLE "Comment" ADD CONSTRAINT "Comment_commentId_fkey" FOREIGN KEY ("commentId") REFERENCES "Comment"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Comment" ADD CONSTRAINT "Comment_parentCommentId_fkey" FOREIGN KEY ("parentCommentId") REFERENCES "Comment"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Comment" ADD CONSTRAINT "Comment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
