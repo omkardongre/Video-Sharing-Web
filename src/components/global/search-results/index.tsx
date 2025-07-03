@@ -8,9 +8,10 @@ import Link from "next/link";
 interface SearchResultProps {
   results: SearchResultType | null;
   isLoading: boolean;
+  onResultClick?: () => void;
 }
 
-export const SearchResults = ({ results, isLoading }: SearchResultProps) => {
+export const SearchResults = ({ results, isLoading, onResultClick }: SearchResultProps) => {
   if (isLoading) {
     return (
       <div className="absolute top-full left-0 w-full bg-background border rounded-md shadow-lg mt-2 p-2 z-50">
@@ -51,6 +52,7 @@ export const SearchResults = ({ results, isLoading }: SearchResultProps) => {
                 href={`/dashboard/${video.workSpaceId}/video/${video.id}`}
                 key={video.id}
                 className="flex items-center gap-2 p-2 hover:bg-accent rounded-md"
+                onClick={onResultClick}
               >
                 <Video size={16} />
                 <div>
@@ -72,6 +74,7 @@ export const SearchResults = ({ results, isLoading }: SearchResultProps) => {
                 href={`/dashboard/${folder.workSpaceId}/folder/${folder.id}`}
                 key={folder.id}
                 className="flex items-center gap-2 p-2 hover:bg-accent rounded-md"
+                onClick={onResultClick}
               >
                 <FolderIcon size={16} />
                 <p className="text-sm">{folder.name}</p>
@@ -88,6 +91,7 @@ export const SearchResults = ({ results, isLoading }: SearchResultProps) => {
                 href={`/dashboard/${workspace.id}`}
                 key={workspace.id}
                 className="flex items-center gap-2 p-2 hover:bg-accent rounded-md"
+                onClick={onResultClick}
               >
                 <Briefcase size={16} />
                 <p className="text-sm">{workspace.name}</p>

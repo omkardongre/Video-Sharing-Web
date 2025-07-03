@@ -12,10 +12,10 @@ type Props = {
   workspaceId: string;
 };
 
-const Videos = ({ videosKey, workspaceId }: Props) => {
+const Videos = ({ videosKey, folderId, workspaceId }: Props) => {
   const { data: videoData } = useQueryData<WorkspaceVideosResponse>(
     [videosKey],
-    () => getAllUserVideos(workspaceId)
+    () => getAllUserVideos(folderId)
   );
 
   if (!videoData) {
@@ -44,7 +44,7 @@ const Videos = ({ videosKey, workspaceId }: Props) => {
             <VideoCard key={video.id} workspaceId={workspaceId} {...video} />
           ))
         ) : (
-          <p className="text-[#BDBDBD]"> No videos in workspace</p>
+          <p className="text-[#BDBDBD]"> No videos in this folder</p>
         )}
       </section>
     </div>

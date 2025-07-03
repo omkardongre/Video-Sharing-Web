@@ -35,7 +35,7 @@ export default function RootLayout({
                 {children}
                 <Toaster />
                 {/* TODO : Remove this in production */}
-                <ReactQueryDevtools initialIsOpen={false} />
+                {/* <ReactQueryDevtools initialIsOpen={false} /> */}
               </ReactQueryProvider>
             </ReduxProvider>
           </ThemeProviders>

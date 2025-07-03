@@ -60,7 +60,14 @@ export const SearchBar = () => {
         placeholder="Search for videos, folders & workspaces"
       />
       {(searchResults || isLoading) && (
-        <SearchResults results={searchResults} isLoading={isLoading} />
+        <SearchResults
+          results={searchResults}
+          isLoading={isLoading}
+          onResultClick={() => {
+            setSearchQuery("");
+            setSearchResults(null);
+          }}
+        />
       )}
     </div>
   );

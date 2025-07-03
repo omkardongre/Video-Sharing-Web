@@ -146,6 +146,11 @@ bun start
 - `bun start` - Start production server
 - `bun lint` - Run ESLint
 
+## 🔗 Related Projects
+
+- [Desktop Application](https://github.com/omkardongre/Video-Sharing-Desktop-App)
+- [Video Processing Server](https://github.com/omkardongre/Video-Processing-Server)
+
 ## 📄 License
 
 This project was created for learning purposes, inspired by Web Prodigies https://www.youtube.com/watch?v=3R63m4sTpKo

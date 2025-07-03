@@ -29,7 +29,7 @@ model User {
   notification Notification[]
   sender       Invite[]       @relation("sender")
   receiver     Invite[]       @relation("receiver")
-  trial        Boolean        @default(false)
+  trial        Boolean        @default(true)
   firstView    Boolean        @default(false)
   comment      Comment[]
 }
@@ -52,7 +52,7 @@ model Subscription {
   User       User?             @relation(fields: [userId], references: [id])
   userId     String?           @unique @db.Uuid
   createdAt  DateTime          @default(now())
-  plan       SUBSCRIPTION_PLAN @default(FREE)
+  plan       SUBSCRIPTION_PLAN @default(PRO)
   updatedAt  DateTime          @default(now())
   customerId String?           @unique
 }

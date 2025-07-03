@@ -20,11 +20,11 @@ export const MENU_ITEMS = (
     href: `/dashboard/${workspaceId}/notifications`,
     icon: <Bell />,
   },
-  {
-    title: "Billing",
-    href: `/dashboard/${workspaceId}/billing`,
-    icon: <CreditCard />,
-  },
+  // {
+  //   title: "Billing",
+  //   href: `/dashboard/${workspaceId}/billing`,
+  //   icon: <CreditCard />,
+  // },
   {
     title: "Settings",
     href: `/dashboard/${workspaceId}/settings`,

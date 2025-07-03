@@ -22,7 +22,7 @@ type Props = {
 const VideoPreview = ({ videoId }: Props) => {
   const router = useRouter();
 
-  const { data } = useQueryData(["preview-video"], () =>
+  const { data } = useQueryData(["preview-video", videoId], () =>
     getPreviewVideo(videoId)
   );
 
